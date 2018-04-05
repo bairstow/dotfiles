@@ -36,8 +36,10 @@ if [ "$(uname)" == "Linux" ]; then
   h_info "\n\nRunning on Linux"
 
   source script/apt.sh
+  source script/docker.sh
 fi
 
+source script/tools.sh
 source script/nvm.sh
 
 # for backup of vim overwrite (symlinking neovim config to current vim)
