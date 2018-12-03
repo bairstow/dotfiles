@@ -1,150 +1,202 @@
-#+TITLE: Emacs Configuration
-#+AUTHOR: Josh Bairstow
+#+TITLE: emacs config
+#+AUTHOR: josh bairstow
 #+EMAIL: joshbairstow@gmail.com
 
-* Use sensible-defaults.el
+* Packages...
+** Archive definitions
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (package-initialize)
+#+END_SRC
+** ELPA archive description
+#+BEGIN_SRC emacs-lisp
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+#+END_SRC
+** Package definitions
+#+BEGIN_SRC emacs-lisp
+ (defvar my-packages
+  '(paredit
+    clojure-mode
+    clojure-mode-extra-font-locking
+    cider
+    smex
+    projectile
+    rainbow-delimiters
+    magit
+    gruvbox-theme))
+#+END_SRC
+** Package install
+#+BEGIN_SRC emacs-lisp
+  (dolist (p my-packages)
+    (when (not (package-installed-p p))
+      (package-install p)))
+#+END_SRC
 
+* Defaults...
+** Sensible Defaults Repo
 Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
-
 #+BEGIN_SRC emacs-lisp
   (load-file "~/git/sensible-defaults.el/sensible-defaults.el")
   (sensible-defaults/use-all-settings)
-  (sensible-defaults/use-all-keybindings)
-  (sensible-defaults/backup-to-temp-directory)
 #+END_SRC
 
-* =evil-mode=
-
-Use =evil=.
-
+* Evil Mode...
+** Evil Mode Repo
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/git/evil")
   (require 'evil)
   (evil-mode 1)
 #+END_SRC
-
-Make adjustment to expression evaluation when the point is on a lisp closing paren in evil mode
-
+** Adjustment for emacs end of line evals in evil mode
 #+BEGIN_SRC emacs-lisp
-;;  (add-to-list 'load-path "~/git/evil-adjust")
-;;  (require 'evil-adjust)
-;;  (evil-adjust)
-;; (evil-move-beyond-eol t)
+  (add-to-list 'load-path "~/git/evil-adjust")
+  (require 'evil-adjust)
+  (evil-adjust)
+#+END_SRC
+** Bind 'jk' to return to normal state
+#+BEGIN_SRC emacs-lisp
+  (defun my-jk ()
+    (interactive)
+    (let* ((initial-key ?j)
+          (final-key ?k)
+          (timeout 0.5)
+          (event (read-event nil nil timeout)))
+      (if event
+          ;; timeout met
+          (if (and (characterp event) (= event final-key))
+              (evil-normal-state)
+            (insert initial-key)
+            (push event unread-command-events))
+        ;; timeout exceeded
+        (insert initial-key))))
+
+  (define-key evil-insert-state-map (kbd "j") 'my-jk)
 #+END_SRC
 
-Enable =surround= everywhere.
-
-#+BEGIN_SRC emacs-lisp
-;;  (global-evil-surround-mode 1)
-#+END_SRC
-
-Bind =C-p= to fuzzy-finding files in the current project.
-
-#+BEGIN_SRC emacs-lisp
-  (define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
-#+END_SRC
-
-* UI preferences
-** Tweak window chrome
-
-I don't usually use the menu or scroll bar, and they take up useful space.
-
+* UI preferences...
+** Tweak window appearance
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode 0)
   (menu-bar-mode 0)
+  (blink-cursor-mode 0)
+  (global-linum-mode 1)
   (when window-system
     (scroll-bar-mode -1))
 #+END_SRC
-
-The default frame title isn't useful. This binds it to the name of the current
-project:
-
+** Default frame title
 #+BEGIN_SRC emacs-lisp
   (setq frame-title-format '((:eval (projectile-project-name))))
 #+END_SRC
+** Theme set
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'gruvbox-dark-soft t)
+#+END_SRC
+** No bell
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
 
-** Use fancy lambdas
-
-Why not?
-
+* Editing...
+** Parens settings
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode 1)
+#+END_SRC
+** Fancy lamdas
 #+BEGIN_SRC emacs-lisp
   (global-prettify-symbols-mode t)
 #+END_SRC
-
-** Highlight the current line
-
-=global-hl-line-mode= softly highlights the background color of the line
-containing point. It makes it a bit easier to find point, and it's useful when
-pairing or presenting code.
-
+** Current line highlight
 #+BEGIN_SRC emacs-lisp
   (when window-system
-    (global-hl-line-mode))
+    (global-hl-line-mode 1))
 #+END_SRC
-
-* Programming customizations
-
-I like shallow indentation, but tabs are displayed as 8 characters by default.
-This reduces that.
-
+** Tab width
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 2)
 #+END_SRC
-
+** No hard tabs
 #+BEGIN_SRC emacs-lisp
-  (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  '(ansi-color-faces-vector
-  [default default default italic underline success warning error])
-  '(ansi-color-names-vector
-  ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
-  '(custom-enabled-themes (quote (tsdh-dark))))
-  (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+  (setq-default indent-tabs-mode nil)
 #+END_SRC
 
+* Paredit
+** Setup
 #+BEGIN_SRC emacs-lisp
-(setq scheme-root "Applications/MIT-Scheme.app/Contents/Resources")
-
-;; (setq scheme-program-name
-;;       (concat
-;;        scheme-root "/mit-scheme "
-;;        "--library " scheme-root " "
-;;        "--band " scheme-root "/all.com "
-;;        "-heap 10000"))
-
-(setq scheme-program-name "/Applications/MIT-Scheme.app/Contents/Resources/mit-scheme")
-
-(add-to-list 'load-path "~/git/rainbow-delimiters")
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 #+END_SRC
 
+* ElDoc
+** Setup
 #+BEGIN_SRC emacs-lisp
-;;; I prefer cmd key for meta
-(setq mac-option-key-is-meta nil
-      mac-command-key-is-meta t
-      mac-command-modifier 'meta
-      mac-option-modifier 'none)
-(set-keyboard-coding-system nil)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 
+* Clojure
+** Enable paredit for clojure
 #+BEGIN_SRC emacs-lisp
-;;; Enable Ido mode by default
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(setq ido-create-new-buffer 'always)
-(ido-mode 1)
+  (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+#+END_SRC
+** Handle camel-case tokens
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'clojure-mode-hook 'subword-mode)
+#+END_SRC
+** Syntax highlighting
+#+BEGIN_SRC emacs-lisp
+  (require 'clojure-mode-extra-font-locking)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (setq inferior-lisp-program "lein repl")
+              (font-lock-add-keywords
+              nil
+              '(("(\\(facts?\\)"
+                  (1 font-lock-keyword-face))
+                ("(\\(background?\\)"
+                  (1 font-lock-keyword-face))))
+              (define-clojure-indent (fact 1))
+              (define-clojure-indent (facts 1))))
 #+END_SRC
 
+* Cider
+** Minibuffer docs for repl code
 #+BEGIN_SRC emacs-lisp
-;;; Setup mit-scheme config
-(setq scheme-program-name "/usr/local/bin/mit-scheme")
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+#+END_SRC
+** Switch to buffer on connection
+#+BEGIN_SRC emacs-lisp
+  (setq cider-repl-pop-to-buffer-on-connect t)
+#+END_SRC
+** Switch to buffer on error
+#+BEGIN_SRC emacs-lisp
+  (setq cider-show-error-buffer t)
+  (setq cider-auto-select-error-buffer t)
+#+END_SRC
+** Store history
+#+BEGIN_SRC emacs-lisp
+  (setq cider-repl-history-file "~/.emacs.d/cider-history")
+#+END_SRC
+** Wrap history navigation
+#+BEGIN_SRC emacs-lisp
+  (setq cider-repl-wrap-history t)
+#+END_SRC
+** Enable paredit within repl
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+#+END_SRC
+** Additional extensions for clojure mode
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
 #+END_SRC

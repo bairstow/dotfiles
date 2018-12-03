@@ -1,80 +1,122 @@
 
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+(defvar my-packages
+ '(paredit
+   clojure-mode
+   clojure-mode-extra-font-locking
+   cider
+   smex
+   projectile
+   rainbow-delimiters
+   magit
+   gruvbox-theme))
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
 (load-file "~/git/sensible-defaults.el/sensible-defaults.el")
 (sensible-defaults/use-all-settings)
-(sensible-defaults/use-all-keybindings)
-(sensible-defaults/backup-to-temp-directory)
 
 (add-to-list 'load-path "~/git/evil")
 (require 'evil)
 (evil-mode 1)
 
-;;  (add-to-list 'load-path "~/git/evil-adjust")
-;;  (require 'evil-adjust)
-;;  (evil-adjust)
-;; (evil-move-beyond-eol t)
+(add-to-list 'load-path "~/git/evil-adjust")
+(require 'evil-adjust)
+(evil-adjust)
 
-;;  (global-evil-surround-mode 1)
+(defun my-jk ()
+  (interactive)
+  (let* ((initial-key ?j)
+        (final-key ?k)
+        (timeout 0.5)
+        (event (read-event nil nil timeout)))
+    (if event
+        ;; timeout met
+        (if (and (characterp event) (= event final-key))
+            (evil-normal-state)
+          (insert initial-key)
+          (push event unread-command-events))
+      ;; timeout exceeded
+      (insert initial-key))))
 
-(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+(define-key evil-insert-state-map (kbd "j") 'my-jk)
 
 (tool-bar-mode 0)
 (menu-bar-mode 0)
+(blink-cursor-mode 0)
+(global-linum-mode 1)
 (when window-system
   (scroll-bar-mode -1))
 
 (setq frame-title-format '((:eval (projectile-project-name))))
 
+(load-theme 'gruvbox-dark-soft t)
+
+(setq ring-bell-function 'ignore)
+
+(show-paren-mode 1)
+
 (global-prettify-symbols-mode t)
 
 (when window-system
-  (global-hl-line-mode))
+  (global-hl-line-mode 1))
 
 (setq-default tab-width 2)
 
-(custom-set-variables
-;; custom-set-variables was added by Custom.
-;; If you edit it by hand, you could mess it up, so be careful.
-;; Your init file should contain only one such instance.
-;; If there is more than one, they won't work right.
-'(ansi-color-faces-vector
-[default default default italic underline success warning error])
-'(ansi-color-names-vector
-["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
-'(custom-enabled-themes (quote (tsdh-dark))))
-(custom-set-faces
-;; custom-set-faces was added by Custom.
-;; If you edit it by hand, you could mess it up, so be careful.
-;; Your init file should contain only one such instance.
-;; If there is more than one, they won't work right.
-)
+(setq-default indent-tabs-mode nil)
 
-(setq scheme-root "Applications/MIT-Scheme.app/Contents/Resources")
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
-;; (setq scheme-program-name
-;;       (concat
-;;        scheme-root "/mit-scheme "
-;;        "--library " scheme-root " "
-;;        "--band " scheme-root "/all.com "
-;;        "-heap 10000"))
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
-(setq scheme-program-name "/Applications/MIT-Scheme.app/Contents/Resources/mit-scheme")
+(add-hook 'clojure-mode-hook 'enable-paredit-mode)
 
-(add-to-list 'load-path "~/git/rainbow-delimiters")
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'clojure-mode-hook 'subword-mode)
 
-;;; I prefer cmd key for meta
-(setq mac-option-key-is-meta nil
-      mac-command-key-is-meta t
-      mac-command-modifier 'meta
-      mac-option-modifier 'none)
-(set-keyboard-coding-system nil)
+(require 'clojure-mode-extra-font-locking)
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (setq inferior-lisp-program "lein repl")
+            (font-lock-add-keywords
+            nil
+            '(("(\\(facts?\\)"
+                (1 font-lock-keyword-face))
+              ("(\\(background?\\)"
+                (1 font-lock-keyword-face))))
+            (define-clojure-indent (fact 1))
+            (define-clojure-indent (facts 1))))
 
-;;; Enable Ido mode by default
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(setq ido-create-new-buffer 'always)
-(ido-mode 1)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
-;;; Setup mit-scheme config
-(setq scheme-program-name "/usr/local/bin/mit-scheme")
+(setq cider-repl-pop-to-buffer-on-connect t)
+
+(setq cider-show-error-buffer t)
+(setq cider-auto-select-error-buffer t)
+
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+
+(setq cider-repl-wrap-history t)
+
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
