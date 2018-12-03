@@ -34,4 +34,12 @@ Plug 'prettier/vim-prettier', { 'do': 'npm install', 'for': ['javascript', 'css'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" clojure
+Plug 'guns/vim-clojure-static'
+Plug 'tpope/vim-fireplace'
+Plug 'bhurlow/vim-parinfer'
+
+" lisp
+Plug 'kien/rainbow_parentheses.vim'
+
 call plug#end()

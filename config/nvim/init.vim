@@ -17,7 +17,7 @@ set textwidth=120
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
-let g:python_host_prog = '/usr/local/bin/python'
+let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/bin/python3'
 
 " }}}
@@ -46,16 +46,17 @@ colorscheme gruvbox           " Set the colorscheme
 set background=dark
 let g:gruvbox_contrast_dark='soft'
 
-" make the highlighting of tabs and other non-text less annoying
-highlight SpecialKey ctermbg=none ctermfg=236 guifg=#2E2E2E
-highlight NonText ctermbg=none ctermfg=238 guifg=#444444
-
 " set custom indent guide styles
 let g:indent_guides_auto_colors=0
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 let g:indent_guides_enable_on_vim_startup=1
 autocmd VimEnter,Colorscheme * : hi IndentGuidesOdd ctermbg=236
+
+" make the highlighting of tabs and other non-text less annoying
+highlight SpecialKey ctermbg=none ctermfg=236 guifg=#2E2E2E
+highlight Comment ctermbg=238 ctermfg=236 guifg=#2E2E2E
+highlight NonText ctermbg=none ctermfg=236 guifg=#444444
 
 " make comments and HTML attributes italic
 highlight Comment cterm=italic
