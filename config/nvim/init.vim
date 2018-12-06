@@ -54,9 +54,9 @@ let g:indent_guides_enable_on_vim_startup=1
 autocmd VimEnter,Colorscheme * : hi IndentGuidesOdd ctermbg=236
 
 " make the highlighting of tabs and other non-text less annoying
-highlight SpecialKey ctermbg=none ctermfg=236 guifg=#2E2E2E
-highlight Comment ctermbg=238 ctermfg=236 guifg=#2E2E2E
-highlight NonText ctermbg=none ctermfg=236 guifg=#444444
+highlight SpecialKey ctermbg=none ctermfg=240 guifg=#2E2E2E
+highlight Comment ctermbg=232 ctermfg=240 guifg=#2E2E2E
+highlight NonText ctermbg=none ctermfg=240 guifg=#444444
 
 " make comments and HTML attributes italic
 highlight Comment cterm=italic
