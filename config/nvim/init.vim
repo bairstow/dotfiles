@@ -372,7 +372,7 @@ let g:rg_command = '
   \ -g "*.{js,json,php,md,styl,jade,html,config,py,cpp,c,go,hs,rb,conf,css,scss}"
   \ -g "!{.git,node_modules,vendor}/*" '
 
-command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 0, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 set splitbelow
 set splitright
