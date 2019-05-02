@@ -20,13 +20,12 @@ if [ -d "$HOME/opt" ]; then
 fi
 # adding python location path export
 if [ -d "$HOME/.local" ]; then
- PATH=$HOME/.local/bin:$PATH
+  PATH=$HOME/.local/bin:$PATH
 fi
 # add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 if [ -d "$HOME/.rvm" ]; then
   PATH="$PATH:$HOME/.rvm/bin"
 fi
-export PATH
 
 # # #
 # Shell settings
@@ -62,9 +61,12 @@ if [[ `uname` == "Darwin" ]]; then
   # echo "Setting java directory OSX"
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_172.jdk/Contents/Home
   launchctl setenv JAVA_HOME "$JAVA_HOME"
-# elif [[ `uname` == "Linux" ]]; then
-#   echo "Starting on linux system"
+elif [[ `uname` == "Linux" ]]; then
+  export JAVA_HOME="/usr/bin/java/jdk1.8.0_202"
 fi
+PATH=$PATH:$JAVA_HOME/bin
+
+export PATH
 
 # # #
 # NVM settings

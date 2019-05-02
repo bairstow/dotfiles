@@ -30,6 +30,9 @@ Plug 'plasticboy/vim-markdown'
 " syntax formatting
 Plug 'prettier/vim-prettier', { 'do': 'npm install', 'for': ['javascript', 'css', 'scss'] }
 
+" commenting
+Plug 'scrooloose/nerdcommenter'
+
 " fuzzy file find
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -40,6 +43,6 @@ Plug 'tpope/vim-fireplace'
 Plug 'bhurlow/vim-parinfer'
 
 " lisp
-Plug 'kien/rainbow_parentheses.vim'
+" Plug 'louchen1990/rainbow'
 
 call plug#end()

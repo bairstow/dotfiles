@@ -370,7 +370,8 @@ let g:SuperTabCrMapping = 0
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
   \ -g "*.{js,json,php,md,styl,jade,html,config,py,cpp,c,go,hs,rb,conf,css,scss}"
-  \ -g "!{.git,node_modules,vendor}/*" '
+  \ -g "!{.git,node_modules,vendor}/*"
+  \ -g "!**/{.git,node_modules,vendor}/*" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 0, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
@@ -401,6 +402,10 @@ let g:prettier#config#semi = 'true'
 let g:prettier#config#bracket_spacing = 'true'
 let g:prettier#config#jsx_bracket_same_line = 'false'
 let g:prettier#config#trailing_comma = 'all'
+"let g:ale_fixers = {
+ "\ 'javascript': ['eslint']
+ "\ }
+"let g:ale_fix_on_save = 1
 
 " custom commands
 "
