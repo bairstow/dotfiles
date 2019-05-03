@@ -3,9 +3,22 @@
 required before any package configuration can be made
 #+BEGIN_SRC emacs-lisp
 (require 'package)
-(package-initialize)
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(package-initialize)
+#+END_SRC
+
+define the packages that would like to be installed
+#+BEGIN_SRC emacs-lisp
+(defvar my-packages
+  '(paredit
+    cider
+    smex
+    rainbow-delimiters
+    magit))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 #+END_SRC
 
 
@@ -16,6 +29,13 @@ load and enable evil source files
 (add-to-list 'load-path "~/git/packages/evil")
 (require 'evil)
 (evil-mode 1)
+#+END_SRC
+
+load and enable evil-adjust for lisp eval fix
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/git/packages/evil-adjust")
+(require 'evil-adjust)
+(evil-adjust)
 #+END_SRC
 
 bind 'jk' to return to normal mode
@@ -85,4 +105,26 @@ set default load theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'gruvbox-dark-soft t)
 #+END_SRC
+
+
+* Editing
+
+highlight matching parenthesis
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode 1)
+#+END_SRC
+
+
+* Clojure mode setup
+
+paredit enabled
+#+BEGIN_SRC emacs-lisp
+(add-hook 'clojure-mode-hook 'enable-paredit-mode)
+#+END_SRC
+
+rainbow delimiters enabled
+#+BEGIN_SRC emacs-lisp
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+#+END_SRC
+
 

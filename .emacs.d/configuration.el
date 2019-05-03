@@ -1,11 +1,25 @@
 (require 'package)
-(package-initialize)
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(package-initialize)
+
+(defvar my-packages
+  '(paredit
+    cider
+    smex
+    rainbow-delimiters
+    magit))
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 (add-to-list 'load-path "~/git/packages/evil")
 (require 'evil)
 (evil-mode 1)
+
+(add-to-list 'load-path "~/git/packages/evil-adjust")
+(require 'evil-adjust)
+(evil-adjust)
 
 (defun my-jk ()
   (interactive)
@@ -41,3 +55,9 @@
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'gruvbox-dark-soft t)
+
+(show-paren-mode 1)
+
+(add-hook 'clojure-mode-hook 'enable-paredit-mode)
+
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
