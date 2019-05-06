@@ -13,7 +13,7 @@ export TERM="xterm-256color"
 # # #
 # Path definiton
 # # #
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin
 # include locally installed packages in PATH
 if [ -d "$HOME/opt" ]; then
   PATH="$PATH:$HOME/opt/node/bin"
