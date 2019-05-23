@@ -23,9 +23,8 @@ alias ll="ls -lFh ${colorflag}"
 alias lld="ls -l | grep ^d"
 alias rmf="rm -rf"
 
-# local for work
-alias sshBuildslave="ssh -i ~/.ssh/sydney.pem ubuntu@buildslave.dev.nbvcloud.com"
-alias sshBuildmaster="ssh -i ~/.ssh/sydney.pem ec2-user@zonea.webapp.dev.nbvcloud.com"
+# local
+alias sshAdminSydney="ssh administrator@44.77.237.136"
 alias removeDanglingImages="docker rmi $(docker images --quiet --filter "dangling=true")"
 
 # emacs
@@ -34,3 +33,4 @@ if [[ `uname` == "Darwin" ]]; then
 else
   alias tEmacs="emacs -nw"
 fi
+

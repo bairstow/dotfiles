@@ -54,13 +54,15 @@ let g:indent_guides_enable_on_vim_startup=1
 autocmd VimEnter,Colorscheme * : hi IndentGuidesOdd ctermbg=236
 
 " make the highlighting of tabs and other non-text less annoying
-highlight SpecialKey ctermbg=none ctermfg=240 guifg=#2E2E2E
-highlight Comment ctermbg=232 ctermfg=240 guifg=#2E2E2E
-highlight NonText ctermbg=none ctermfg=240 guifg=#444444
+highlight SpecialKey ctermfg=241 guifg=#665c54
+highlight Comment ctermbg=234 ctermfg=241 guifg=#1d2021 guibg=#665c54
+highlight NonText ctermfg=241 guifg=#665c54
 
 " make comments and HTML attributes italic
 highlight Comment cterm=italic
 highlight htmlArg cterm=italic
+
+highlight Normal guibg=NONE ctermbg=NONE
 
 " highlight suggested max line column
 set cc=100
@@ -369,7 +371,7 @@ let g:SuperTabCrMapping = 0
 " ripgrep search commands
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-  \ -g "*.{js,json,php,md,styl,jade,html,config,py,cpp,c,go,hs,rb,conf,css,scss}"
+  \ -g "*.{js,json,ts,tsx,php,md,styl,jade,html,config,py,cpp,c,go,hs,rb,conf,css,scss}"
   \ -g "!{.git,node_modules,vendor}/*"
   \ -g "!**/{.git,node_modules,vendor}/*" '
 
@@ -393,7 +395,7 @@ let g:prettier#autoformat = 0
 let g:prettier#exec_cmd_async = 1
 let g:prettier#quickfix_enabled = 0
 
-autocmd BufWritePre *.js,*.jsx,*.css,*.scss,*.less PrettierAsync
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx,*.css,*.scss,*.less PrettierAsync
 
 let g:prettier#config#print_width = 160
 let g:prettier#config#tab_width = 2
