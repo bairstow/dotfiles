@@ -24,7 +24,7 @@ alias lld="ls -l | grep ^d"
 alias rmf="rm -rf"
 
 # local
-alias sshAdminSydney="ssh administrator@45.77.237.136"
+alias sshAdminSydney="ssh -i ~/.ssh/id_ci_service administrator@45.77.237.136"
 alias removeDanglingImages="docker rmi $(docker images --quiet --filter "dangling=true")"
 
 # emacs
