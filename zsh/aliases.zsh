@@ -26,6 +26,12 @@ alias rmf="rm -rf"
 # local
 alias sshAdminSydney="ssh -i ~/.ssh/id_ci_service administrator@45.77.237.136"
 alias removeDanglingImages="docker rmi $(docker images --quiet --filter "dangling=true")"
+alias vpn="node ~/git/scriptify/vpnify-build"
+alias irc="node ~/git/scriptify/ircify-build"
+alias obsidianMount="rclone mount jb-google-drive:'Obsidian Vault' ~/Documents/'Obsidian Vault' --allow-non-empty"
+alias obsidianSync="rclone sync -i ~/Documents/'Obsidian Vault' jb-google-drive:'Obsidian Vault'"
+alias obsidianUnmount="fusermount -u ~/Documents/'Obsidian Vault'"
+alias audioReset="pulseaudio -k && sudo alsa force-reload"
 
 # emacs
 if [[ `uname` == "Darwin" ]]; then

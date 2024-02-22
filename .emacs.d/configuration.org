@@ -1,5 +1,6 @@
 * Package initialisation
 
+** package installation
 required before any package configuration can be made
 #+BEGIN_SRC emacs-lisp
 (require 'package)
@@ -21,6 +22,24 @@ define the packages that would like to be installed
     (package-install p)))
 #+END_SRC
 
+** add local set packages
+awesome-tab for displaying buffers as tabs
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/git/packages/awesome-tab")
+(require 'awesome-tab)
+(awesome-tab-mode t)
+#+END_SRC
+
+projectile for project interaction and navigation
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/git/packages/projectile")
+(require 'projectile)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(setq projectile-project-search-path '("~/git/"))
+#+END_SRC
+
+
 
 * Load and configure EVIL mode
 
@@ -29,6 +48,19 @@ load and enable evil source files
 (add-to-list 'load-path "~/git/packages/evil")
 (require 'evil)
 (evil-mode 1)
+#+END_SRC
+
+load and enable evil leader
+- Evil Leader provides the <leader> feature from Vim that provides an easy way to bind keys under a variable prefix key.
+added key bindings
+- <'><'> - save current buffer
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/git/packages/evil-leader")
+(require 'evil-leader)
+(global-evil-leader-mode 1)
+(evil-leader/set-leader ",")
+(evil-leader/set-key "," 'save-buffer)
+(evil-leader/set-key "t" 'awesome-tab-ace-jump)
 #+END_SRC
 
 load and enable evil-adjust for lisp eval fix
@@ -97,6 +129,12 @@ set initial startup message disabled
 (setq inhibit-startup-message t)
 #+END_SRC
 
+haven't yet found a means to set a display margin around the entire window (in similar fashion to vim)
+(setq left-margin-width 4)
+(setq right-margin-width 4)
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+
 
 * UI Theme
 
@@ -127,4 +165,9 @@ rainbow delimiters enabled
 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
 #+END_SRC
 
+add java executable to path
+#+BEGIN_SRC emacs-lisp
+(setenv "PATH" (concat (getenv "PATH") ":/usr/bin/java/jdk1.8.0_202/bin"))
+(setq exec-path (append exec-path '("/usr/bin/java/jdk1.8.0_202/bino")))
+#+END_SRC
 

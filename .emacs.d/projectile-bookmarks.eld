@@ -1,0 +1,1 @@
+("~/git/contracta-legal/docs/" "~/git/contracta-legal/ca-auth/" "~/git/jb-nginx-rps/" "~/git/org-notes/" "~/git/bb-inc/bbng-fed/" "~/git/bb-inc/bbng-bed/" "~/.dotfiles/" "~/git/bb-inc/bb-name-data/")

@@ -1,0 +1,47 @@
+// vim:ts=4:sw=4:et
+{
+    "border": "pixel",
+    "current_border_width": 0,
+    "floating": "auto_off",
+    "geometry": {
+       "height": 1502,
+       "width": 2794,
+       "x": 43,
+       "y": 75
+    },
+    "name": "i3: Layout saving in i3 - Google Chrome",
+    "percent": 0.5,
+    "swallows": [
+       {
+       // "class": "^Google\\-chrome$",
+       // "instance": "^google\\-chrome$",
+       // "title": "^i3\\:\\ Layout\\ saving\\ in\\ i3\\ \\-\\ Google\\ Chrome$",
+       // "window_role": "^browser$"
+       }
+    ],
+    "type": "con"
+}
+
+{
+    "border": "pixel",
+    "current_border_width": 0,
+    "floating": "auto_off",
+    "geometry": {
+       "height": 648,
+       "width": 1032,
+       "x": 0,
+       "y": 0
+    },
+    "name": "i3-save-tree > poewer-window-full.json @ layouts",
+    "percent": 0.5,
+    "swallows": [
+       {
+       // "class": "^Gnome\\-terminal$",
+       // "instance": "^gnome\\-terminal\\-server$",
+       // "title": "^i3\\-save\\-tree\\ \\>\\ poewer\\-window\\-full\\.json\\ \\@\\ layouts$",
+       // "window_role": "^gnome\\-terminal\\-window\\-2f2fae1a\\-8ae0\\-4c9b\\-b5ea\\-f3c794fd677d$"
+       }
+    ],
+    "type": "con"
+}
+

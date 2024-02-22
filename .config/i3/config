@@ -12,7 +12,8 @@
 # exec setup
 exec_always --no-startup-id compton -f
 exec_always ~/.config/polybar/launch.sh
-exec_always feh --bg-scale ~/Documents/pictures/wallpaper/dark_geometric_01.jpg
+# exec_always feh --bg-scale ~/Documents/pictures/wallpaper/dark_geometric_01.jpg
+exec_always feh --bg-scale ~/Documents/wallpaper/gruvbox-01.png
 exec_always xmodmap ~/.xmodmap
 
 set $mod Mod4
@@ -106,34 +107,45 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-set $workspace1 ""
-set $workspace2 ""
-set $workspace3 ""
-set $workspace9 ""
-set $workspace10 ""
+# set $workspace1 ""
+# set $workspace2 ""
+# set $workspace3 ""
+# set $workspace9 ""
+# set $workspace10 ""
+
 # switch to workspace
-bindsym $mod+1 workspace $workspace1
-bindsym $mod+2 workspace $workspace2
-bindsym $mod+3 workspace $workspace3
+# bindsym $mod+1 workspace $workspace1
+# bindsym $mod+2 workspace $workspace2
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+# bindsym $mod+3 workspace $workspace3
+bindsym $mod+3 workspace 3
 bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace $workspace9
-bindsym $mod+0 workspace $workspace10
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+# bindsym $mod+9 workspace $workspace9
+# bindsym $mod+0 workspace $workspace10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $workspace1
-bindsym $mod+Shift+2 move container to workspace $workspace2
-bindsym $mod+Shift+3 move container to workspace $workspace3
+# bindsym $mod+Shift+1 move container to workspace $workspace1
+# bindsym $mod+Shift+2 move container to workspace $workspace2
+# bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace $workspace9
-bindsym $mod+Shift+0 move container to workspace $workspace10
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+# bindsym $mod+Shift+9 move container to workspace $workspace9
+# bindsym $mod+Shift+0 move container to workspace $workspace10
 
 #assign [class"Spotify"] $workspace10
 
@@ -152,10 +164,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym t resize grow height 10 px or 10 ppt
-        bindsym n resize shrink height 10 px or 10 ppt
-        bindsym s resize grow width 10 px or 10 ppt
+        #bindsym h resize shrink width 10 px or 10 ppt
+        #bindsym t resize grow height 10 px or 10 ppt
+        #bindsym n resize shrink height 10 px or 10 ppt
+        #bindsym s resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -168,7 +180,93 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-bindsym $mod+p mode "resize"
+bindsym $mod+r mode "resize"
+
+set $displayMode "Display mode [m]onitor [u]hd [t]v [w]ide [p]b [k]wm"
+
+mode $displayMode {
+        # bind execution of different display modes
+        bindsym m exec "~/.config/i3/scripts/monitor-only.sh"; mode "default"
+        bindsym u exec "~/.config/i3/scripts/uhd.sh"; mode "default"
+        bindsym t exec "~/.config/i3/scripts/home-tv.sh"; mode "default"
+        bindsym w exec "~/.config/i3/scripts/home-widescreen.sh"; mode "default"
+        bindsym k exec "~/.config/i3/scripts/office-kwm-monitor.sh"; mode "default"
+        bindsym p exec "~/.config/i3/scripts/poewerb.sh"; mode "default"
+
+        # bind arrow keys to shift focused container between monitors
+        bindsym Left move container to output left
+        bindsym Down move container to output down
+        bindsym Up move container to output up
+        bindsym Right move container to output right
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+x mode $displayMode
+
+bindsym $mod+g exec "~/.config/i3/scripts/generic-workspace.sh"
+
+set $configMode "Config [c]a-terminal"
+
+mode $configMode {
+        bindsym c exec "~/.config/i3/scripts/ca-terminal.sh"; mode "default"
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+c mode $configMode
+
+set $keyboardMode "Keyboard Layout: [d]vorak [u]s [x]modmap"
+
+mode $keyboardMode {
+        bindsym d exec "setxkbmap dvorak && xmodmap ~/.xmodmap"; mode "default"
+        bindsym u exec "setxkbmap us && xmodmap ~/.xmodmap"; mode "default"
+        bindsym x exec "xmodmap ~/.xmodmap"; mode "default"
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+b mode $keyboardMode
+
+set $notesMode "Notes mode [i]3 [b]rowser [e]macs [c]lojure [r]ecent"
+
+mode $notesMode {
+        bindsym i exec "gnome-terminal --window-with-profile=NOTES --execute mdless ~/.dotfiles/notes/i3.md"; mode "default"
+        bindsym b exec "gnome-terminal --window-with-profile=NOTES --execute mdless ~/.dotfiles/notes/browser.md"; mode "default"
+        bindsym e exec "gnome-terminal --window-with-profile=NOTES --execute mdless ~/.dotfiles/notes/emacs.md"; mode "default"
+        bindsym c exec "gnome-terminal --window-with-profile=NOTES --execute mdless ~/.dotfiles/notes/clojure.md"; mode "default"
+        bindsym r exec "gnome-terminal --window-with-profile=NOTES --execute mdless ~/.dotfiles/notes/recent.md"; mode "default"
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+n mode $notesMode
+
+set $locker i3lock && sleep 1
+set $systemMode "System mode (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown"
+
+mode $systemMode {
+        bindsym l exec --no-startup-id $locker, mode "default"
+        bindsym e exec --no-startup-id i3-msg exit, mode "default"
+        bindsym s exec --no-startup-id $locker && systemctl suspend, mode "default"
+        bindsym h exec --no-startup-id $locker && systemctl hibernate, mode "default"
+        bindsym r exec --no-startup-id systemctl reboot, mode "default"
+        bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+s mode $systemMode
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -198,6 +296,24 @@ bindsym XF86AudioPrev exec playerctl previous
 
 hide_edge_borders both
 
-for_window [class=".*"] border pixel 0
+for_window [class=".*"] border pixel 4
 gaps inner 36
+gaps top 28
+workspace 2 gaps top 0
 
+# smart_borders on
+# smart_borders no_gaps
+# border_radius 4
+
+# gruvbox palette
+# bg-0 - #282828
+# bg-2 - #584945
+# bg-4 - #7C6F64
+# fg-1 - #EBDBB2
+# orange - #D65D0E
+
+# client border color definition
+client.focused #EBDBB2 #EBDBB2 #EBDBB2 #EBDBB2 #EBDBB2
+client.focused_inactive #7C6F64 #7C6F64 #7C6F64 #7C6F64 #7C6F64
+client.unfocused #282828 #282828 #282828 #282828 #282828
+client.urgent #D65D0E #D65D0E #D65D0E #D65D0E #D65D0E
